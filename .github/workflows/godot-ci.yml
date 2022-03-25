@@ -11,7 +11,7 @@ on:
   
 env:
   GODOT_VERSION: 3.4.2
-  EXPORT_NAME: TheBindingOfTuna
+  EXPORT_NAME: "The Binding of Tuna"
 
 
 jobs:
