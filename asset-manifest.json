@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/EPITECH-JAM-March-2022/static/css/main.073c9b0a.css",
+    "main.js": "/EPITECH-JAM-March-2022/static/js/main.0a1346a6.js",
+    "static/js/787.28cb0dcd.chunk.js": "/EPITECH-JAM-March-2022/static/js/787.28cb0dcd.chunk.js",
+    "static/media/logo.svg": "/EPITECH-JAM-March-2022/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
+    "index.html": "/EPITECH-JAM-March-2022/index.html",
+    "main.073c9b0a.css.map": "/EPITECH-JAM-March-2022/static/css/main.073c9b0a.css.map",
+    "main.0a1346a6.js.map": "/EPITECH-JAM-March-2022/static/js/main.0a1346a6.js.map",
+    "787.28cb0dcd.chunk.js.map": "/EPITECH-JAM-March-2022/static/js/787.28cb0dcd.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.073c9b0a.css",
+    "static/js/main.0a1346a6.js"
+  ]
+}
