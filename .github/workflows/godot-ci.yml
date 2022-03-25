@@ -11,7 +11,7 @@ on:
   
 env:
   GODOT_VERSION: 3.4.2
-  EXPORT_NAME: "TheBindingOfTuna"
+  EXPORT_NAME: "The Binding Of Tuna"
 
 
 jobs:
@@ -32,7 +32,7 @@ jobs:
       - name: Windows Build
         run: |
           mkdir -v -p build/windows
-          godot -v --export "Windows Desktop" ../build/windows/$EXPORT_NAME.exe
+          godot -v --export "Windows Desktop" "./build/windows/$EXPORT_NAME.exe"
       - name: Upload Artifact
         uses: actions/upload-artifact@v1
         with:
@@ -56,7 +56,7 @@ jobs:
       - name: Linux Build
         run: |
           mkdir -v -p build/linux
-          godot -v --export "Linux/X11" ../build/linux/$EXPORT_NAME.x86_64
+          godot -v --export "Linux/X11" "./build/linux/$EXPORT_NAME.x86_64"
       - name: Upload Artifact
         uses: actions/upload-artifact@v1
         with:
@@ -80,7 +80,7 @@ jobs:
       - name: Web Build
         run: |
           mkdir -v -p build/web
-          godot -v --export "HTML5" ../build/web/index.html
+          godot -v --export "HTML5" "./build/web/index.html"
       - name: Upload Artifact
         uses: actions/upload-artifact@v1
         with:
@@ -109,7 +109,7 @@ jobs:
       - name: Mac Build
         run: |
           mkdir -v -p build/mac
-          godot -v --export "Mac OSX" ../build/mac/$EXPORT_NAME.zip
+          godot -v --export "Mac OSX" "./build/mac/$EXPORT_NAME.zip"
       - name: Upload Artifact
         uses: actions/upload-artifact@v1
         with:
