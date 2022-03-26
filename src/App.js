@@ -4,6 +4,8 @@ import { asyncRun } from "./py-worker";
 import { readAsDataURL } from "promise-file-reader";
 
 function App() {
+  const converter = fetch("/EPITECH-JAM-March-2022/converter.py").then(response => response.text());
+
   return (
     <div className="App">
       <header className="App-header">
@@ -22,8 +24,8 @@ function App() {
         <input type="file" onChange={async (event) => {
           const file = event.target.files[0];
           const image_data = await readAsDataURL(file);
-          const converter = await (await fetch("/EPITECH-JAM-March-2022/converter.py")).text();
-          const {results, error} = await asyncRun(converter, {
+          const converter_source = await converter;
+          const {results, error} = await asyncRun(converter_source, {
             image_data: image_data.replace("data:image/png;base64,", ""),
           });
           if (error) {
