@@ -22,7 +22,7 @@ function App() {
         <input type="file" onChange={async (event) => {
           const file = event.target.files[0];
           const image_data = await readAsDataURL(file);
-          const converter = await (await fetch("/converter.py")).text();
+          const converter = await (await fetch("/EPITECH-JAM-March-2022/converter.py")).text();
           const {results, error} = await asyncRun(converter, {
             image_data: image_data.replace("data:image/png;base64,", ""),
           });

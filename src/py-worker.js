@@ -1,4 +1,4 @@
-const pyodideWorker = new Worker("./webworker.js");
+const pyodideWorker = new Worker("/EPITECH-JAM-March-2022/webworker.js");
 
 const callbacks = {};
 
