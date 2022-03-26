@@ -14,6 +14,37 @@ def convert_image_to_blue(image: Image):
             image.putpixel((y,x), (0,0,b))
     return image
 
+def bring_out_blue(image: Image):
+    gray = img.convert('L')
+    hsv = img.convert('HSV')
+
+    img = np.asarray(img)
+    hsv = np.asarray(hsv)
+    gray = np.asarray(gray)
+
+    lower_blue = np.array([90, 50, 70])
+    upper_blue = np.array([128, 255, 255])
+
+    mask = np.zeros(img.shape[:2], dtype="uint8")
+    mask[
+        (hsv[:, :, 0] >= lower_blue[0]) & (hsv[:, :, 0] <= upper_blue[0]) &
+        (hsv[:, :, 1] >= lower_blue[1]) & (hsv[:, :, 1] <= upper_blue[1]) &
+        (hsv[:, :, 2] >= lower_blue[2]) & (hsv[:, :, 2] <= upper_blue[2])] = 255
+
+    mask_inv = np.full(img.shape[:2], 255, dtype="uint8")
+    mask_inv = mask ^ mask_inv
+
+    res = img.copy()
+    res[mask == 0] = 0
+
+    back = gray.copy()
+    back[mask_inv == 0] = 0
+    back = np.stack((back,)*3, axis=-1)
+
+    res = res + back
+
+    return Image.fromarray(res)
+
 image = Image.open(io.BytesIO(base64.b64decode(image_data)))
 image = image.convert('L').convert('RGB')
 image = convert_image_to_blue(image)
