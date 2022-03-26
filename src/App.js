@@ -3,34 +3,6 @@ import './App.css';
 import { asyncRun } from "./py-worker";
 
 function App() {
-
-  const script = `
-      import statistics
-      from js import A_rank
-      statistics.stdev(A_rank)
-  `;
-
-  const context = {
-    A_rank: [0.8, 0.4, 1.2, 3.7, 2.6, 5.8],
-  };
-
-  async function main() {
-    try {
-      const { results, error } = await asyncRun(script, context);
-      if (results) {
-        console.log("pyodideWorker return results: ", results);
-      } else if (error) {
-        console.log("pyodideWorker error: ", error);
-      }
-    } catch (e) {
-      console.log(
-        `Error in pyodideWorker at ${e.filename}, Line: ${e.lineno}, ${e.message}`
-      );
-    }
-  }
-
-  main();
-
   return (
     <div className="App">
       <header className="App-header">
@@ -46,6 +18,19 @@ function App() {
         >
           Learn React
         </a>
+        <input type="file" onChange={async (event) => {
+          const file = event.target.files[0];
+          const data = await file.arrayBuffer()
+          const re = /(?:\.([^.]+))?$/;
+          const {results, error} = await asyncRun(data, {}, "convert", re.exec(file.name)[1]);
+          if (error) {
+            console.log(error);
+          } else {
+            const blob = new Blob([results]);
+            var url = window.URL.createObjectURL(blob);
+            window.location.assign(url);
+          }
+        }}></input>
       </header>
     </div>
   );
