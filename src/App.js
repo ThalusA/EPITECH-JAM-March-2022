@@ -75,16 +75,19 @@ function App() {
   };
 
   return (
-    <div className="App" onDrop={onDropFile} onClick={() => inputFile.current?.click()} style={{"z-index": 10}}>
+    <div className="App" onDrop={onDropFile} onClick={() => inputFile.current?.click()}>
       <input ref={inputFile} type="file" style={{"display": "none"}} onChange={onClickFile} />
-      <header className="App-header">
+      <header>
         <p>
           Let the blues fulfill your images (click on the page to load your image or drag and drop)
         </p>
-        <p>
+        <p >
           Select your blue mode
-          <Select ref={modeSelector} options={modes} defaultValue={modes[0]} style={{"z-index": 20}} onChange={event => setMode(event.value)}/>
         </p>
+        <div onClick={event => event.stopPropagation()}>
+          <Select  ref={modeSelector} options={modes} defaultValue={modes[0]}
+                  onChange={event => {setMode(event.value)}}/>
+        </div>
       </header>
       <main>
         {imageData !== "" ? <img src={imageData}  alt="converted"/> : null}
