@@ -27,6 +27,7 @@ function App() {
           const converter_source = await converter;
           const {results, error} = await asyncRun(converter_source, {
             image_data: image_data.replace(/^data:image\/[a-zA-Z]+;base64,/, ""),
+            mode: "default"
           });
           if (error) {
             console.log(error);

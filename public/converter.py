@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 from PIL import Image
-from js import image_data
+from js import image_data, mode
 import numpy as np
 import base64
 import os
 import io
 
 def convert_image_to_blue(image: Image):
+    image = image.convert('L').convert('RGB')
     height, width = image.size
     for y in range(height):
         for x in range(width):
@@ -22,8 +23,8 @@ def bring_out_blue(img: Image):
     hsv = np.asarray(hsv)
     gray = np.asarray(gray)
 
-    lower_blue = np.array([90, 50, 70])
-    upper_blue = np.array([128, 255, 255])
+    lower_blue = np.array([120, 50, 70])
+    upper_blue = np.array([180, 255, 255])
 
     mask = np.zeros(img.shape[:2], dtype="uint8")
     mask[
@@ -45,9 +46,13 @@ def bring_out_blue(img: Image):
 
     return Image.fromarray(res)
 
+MODES = {
+    'default': bring_out_blue,
+    'blue': convert_image_to_blue
+}
+
 image = Image.open(io.BytesIO(base64.b64decode(image_data)))
-image = image.convert('L').convert('RGB')
-image = convert_image_to_blue(image)
+image = MODES[mode](image)
 image_io = io.BytesIO()
 image.save(image_io, 'jpeg')
 encoded_image = base64.b64encode(image_io.getvalue())
