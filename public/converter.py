@@ -14,7 +14,7 @@ def convert_image_to_blue(image: Image):
             image.putpixel((y,x), (0,0,b))
     return image
 
-def bring_out_blue(image: Image):
+def bring_out_blue(img: Image):
     gray = img.convert('L')
     hsv = img.convert('HSV')
 
