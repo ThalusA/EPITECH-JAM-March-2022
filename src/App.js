@@ -26,7 +26,7 @@ function App() {
           const image_data = await readAsDataURL(file);
           const converter_source = await converter;
           const {results, error} = await asyncRun(converter_source, {
-            image_data: image_data.replace("data:image/png;base64,", ""),
+            image_data: image_data.replace(/^data:image\/[a-zA-Z]+;base64,/, ""),
           });
           if (error) {
             console.log(error);
