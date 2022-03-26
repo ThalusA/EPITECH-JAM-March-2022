@@ -1,4 +1,6 @@
 // webworker.js
+// eslint-disable-next-line import/no-anonymous-default-export
+// eslint-disable-next-line no-restricted-globals
 
 // Setup your project to serve `py-worker.js`. You should also serve
 // `pyodide.js`, and all its associated `.asm.js`, `.data`, `.json`,
@@ -11,7 +13,7 @@ async function loadPyodideAndPackages() {
   });
   await self.pyodide.loadPackage(["Pillow", "numpy"]);
 }
-let pyodideReadyPromise = loadPyodideAndPackages();
+const pyodideReadyPromise = loadPyodideAndPackages();
 
 self.onmessage = async (event) => {
   // make sure loading is done
@@ -23,11 +25,11 @@ self.onmessage = async (event) => {
     self[key] = context[key];
   }
   // Now is the easy part, the one that is similar to working in the main thread:
+  await self.pyodide.loadPackagesFromImports(python);
   try {
-    await self.pyodide.loadPackagesFromImports(python);
-    let results = await self.pyodide.runPythonAsync(python);
-    self.postMessage({ results, id });
+    results = await self.pyodide.runPythonAsync(python);
+    self.postMessage({ results, id: id });
   } catch (error) {
-    self.postMessage({ error: error.message, id });
+    self.postMessage({ error: error.message, id: id });
   }
 };
