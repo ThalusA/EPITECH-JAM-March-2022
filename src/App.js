@@ -1,6 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import { asyncRun } from "./py-worker";
+import { readAsDataURL } from "promise-file-reader";
 
 function App() {
   return (
@@ -20,17 +21,20 @@ function App() {
         </a>
         <input type="file" onChange={async (event) => {
           const file = event.target.files[0];
-          const data = await file.arrayBuffer()
-          const re = /(?:\.([^.]+))?$/;
-          const {results, error} = await asyncRun(data, {}, "convert", re.exec(file.name)[1]);
+          const image_data = await readAsDataURL(file);
+          const converter = await (await fetch("/converter.py")).text();
+          const {results, error} = await asyncRun(converter, {
+            image_data: image_data.replace("data:image/png;base64,", ""),
+          });
           if (error) {
             console.log(error);
           } else {
-            const blob = new Blob([results]);
-            var url = window.URL.createObjectURL(blob);
-            window.location.assign(url);
+            const a = document.createElement("a");
+            a.href = `data:image/jpeg;base64,${results}`
+            a.download = file.name;
+            a.click();
           }
-        }}></input>
+        }}/>
       </header>
     </div>
   );

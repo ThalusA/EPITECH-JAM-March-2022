@@ -11,16 +11,15 @@ pyodideWorker.onmessage = (event) => {
 
 const asyncRun = (() => {
   let id = 0; // identify a Promise
-  return (data, context, type, ext) => {
+  return (python, context) => {
     // the id could be generated more carefully
     id = (id + 1) % Number.MAX_SAFE_INTEGER;
-    const subdata = [id, type, ext];
     return new Promise((onSuccess) => {
       callbacks[id] = onSuccess;
       pyodideWorker.postMessage({
         ...context,
-        data,
-        subdata,
+        python,
+        id,
       });
     });
   };
