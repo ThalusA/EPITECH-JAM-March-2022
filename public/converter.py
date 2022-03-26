@@ -52,7 +52,7 @@ MODES = {
 }
 
 image = Image.open(io.BytesIO(base64.b64decode(image_data)))
-image = MODES[mode](image)
+image = MODES[mode](image.convert("RGB"))
 image_io = io.BytesIO()
 image.save(image_io, 'jpeg')
 encoded_image = base64.b64encode(image_io.getvalue())
