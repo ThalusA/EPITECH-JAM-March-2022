@@ -47,9 +47,32 @@ def bring_out_blue(img: Image):
 
     return Image.fromarray(res)
 
+def not_blue_vanisher(img: Image):
+    img = img.convert('RGB')
+    hsv = img.convert('HSV')
+
+    img = np.asarray(img)
+    hsv = np.asarray(hsv)
+
+    lower_blue = np.array([120, 50, 70])
+    upper_blue = np.array([180, 255, 255])
+
+    mask = np.zeros(img.shape[:2], dtype="uint8")
+    mask[
+        (hsv[:, :, 0] >= lower_blue[0]) & (hsv[:, :, 0] <= upper_blue[0]) &
+        (hsv[:, :, 1] >= lower_blue[1]) & (hsv[:, :, 1] <= upper_blue[1]) &
+        (hsv[:, :, 2] >= lower_blue[2]) & (hsv[:, :, 2] <= upper_blue[2])] = 255
+
+    res = img.copy()
+    res = np.dstack((res, mask))
+    res[mask == 0] = (0, 0, 0, 0)
+
+    return Image.fromarray(res)
+
 MODES = {
     'default': bring_out_blue,
-    'blue': convert_image_to_blue
+    'blue': convert_image_to_blue,
+    'vanisher': not_blue_vanisher
 }
 
 image = Image.open(io.BytesIO(base64.b64decode(image_data)))

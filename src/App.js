@@ -23,6 +23,7 @@ function App() {
   const modes = [
     {value: 'default', label:'Default'},
     {value: 'blue', label:'Blue'},
+    {value: 'vanisher', label:'Vanisher'},
   ];
   const [mode, setMode] = useState('default');
 
