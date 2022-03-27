@@ -7,15 +7,16 @@ import os
 import io
 
 def convert_image_to_blue(image: Image):
-    image = image.convert('L').convert('RGB')
+    image = image.convert('LA').convert('RGBA')
     height, width = image.size
     for y in range(height):
         for x in range(width):
-            _, _, b = image.getpixel((y, x))
-            image.putpixel((y,x), (0,0,b))
+            _, _, b, a = image.getpixel((y, x))
+            image.putpixel((y,x), (0,0,b,a))
     return image
 
 def bring_out_blue(img: Image):
+    img = img.convert('RGB')
     gray = img.convert('L')
     hsv = img.convert('HSV')
 
@@ -52,8 +53,8 @@ MODES = {
 }
 
 image = Image.open(io.BytesIO(base64.b64decode(image_data)))
-image = MODES[mode](image.convert("RGB"))
+image = MODES[mode](image)
 image_io = io.BytesIO()
-image.save(image_io, 'jpeg')
+image.save(image_io, 'png')
 encoded_image = base64.b64encode(image_io.getvalue())
 str(encoded_image)[2:-1]

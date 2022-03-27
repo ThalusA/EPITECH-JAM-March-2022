@@ -50,7 +50,7 @@ function App() {
           console.error(error);
           setError("The script encountered an error. Please report DevTools console output to ThalusA#5531");
         } else {
-          setImageData(`data:image/jpeg;base64,${results}`);
+          setImageData(`data:image/png;base64,${results}`);
         }
       } else {
         setError("The provided file is not an image");
