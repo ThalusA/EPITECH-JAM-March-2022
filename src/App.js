@@ -1,8 +1,9 @@
 import Pyodide from "./py-worker";
 import {readAsDataURL} from "promise-file-reader";
-import {useRef, useState} from "react";
-import {Box, Grid, MenuItem, Select, Typography} from "@mui/material";
+import {useEffect, useRef, useState} from "react";
+import {Box, Grid, MenuItem, Select, SvgIcon, Typography} from "@mui/material";
 import {lightBlue} from "@mui/material/colors";
+import Polygon from "./polygon.svg"
 import anime from 'animejs/lib/anime.es.js';
 
 function App() {
@@ -11,17 +12,18 @@ function App() {
     const [imageData, setImageData] = useState("");
     const [loading, setLoading] = useState(false);
     const base64HeaderRegExp = /^data:image\/[a-zA-Z]+;base64,/;
+    const [imageComponent, setImageComponent] = useState(null);
     /**
      * @type {React.MutableRefObject<undefined|HTMLInputElement>}
      */
     const inputFile = useRef(undefined);
 
-  const modes = [
-    {value: 'default', label:'Default'},
-    {value: 'blue', label:'Blue'},
-    {value: 'vanisher', label:'Vanisher'},
-  ];
-  const [mode, setMode] = useState('default');
+    const modes = [
+        {value: 'default', label: 'Default'},
+        {value: 'blue', label: 'Blue'},
+        {value: 'vanisher', label: 'Vanisher'},
+    ];
+    const [mode, setMode] = useState('default');
 
     /**
      *
@@ -74,11 +76,39 @@ function App() {
         return convertFile(event.target.files);
     };
 
+    useEffect(() => {
+        anime({
+            targets: ['.svg-attributes-demo polygon', 'feTurbulence', 'feDisplacementMap'],
+            points: '64 128 8.574 96 8.574 32 64 0 119.426 32 119.426 96',
+            baseFrequency: 0,
+            scale: 1,
+            loop: true,
+            direction: 'alternate',
+            easing: 'easeInOutExpo'
+        });
+    });
+
+    useEffect(() => {
+        if (loading === true) {
+            setImageComponent(<SvgIcon src={Polygon} className="svg-attributes-polygon" alt="polygon"/>);
+        } else if (error !== "") {
+            setImageComponent(<Typography>
+                Error: {error}
+            </Typography>);
+        } else if (imageData !== "") {
+            setImageComponent(<img src={imageData} style={{borderRadius: "5%"}} alt="converted"/>);
+        } else {
+            setImageComponent(null);
+        }
+    }, [loading, error, imageData]);
+
     return (
         <Grid onDrop={onDropFile} onClick={() => inputFile.current?.click()}
               container direction="column"
-             sx={{minHeight: "100vh", minWidth: "100vw", alignItems: "center", justifyContent: "center",
-             backgroundColor: lightBlue["200"]}}>
+              sx={{
+                  minHeight: "100vh", minWidth: "100vw", alignItems: "center", justifyContent: "center",
+                  backgroundColor: lightBlue["200"]
+              }}>
             <input ref={inputFile} type="file" style={{"display": "none"}} onChange={onClickFile}/>
             <Grid item xs={3}>
                 <Typography>
@@ -101,14 +131,8 @@ function App() {
 
             </Grid>
             <Grid item xs={3}>
-                {imageData !== "" ? <img src={imageData} style={{borderRadius: "5%"}} alt="converted"/> : (loading ? null : null)}
-                {error !== "" ? <Typography>
-                    {error}
-                </Typography> : null}
+                {imageComponent}
             </Grid>
-
-
-
         </Grid>
     );
 }
