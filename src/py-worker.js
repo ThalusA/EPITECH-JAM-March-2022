@@ -1,28 +1,32 @@
-const pyodideWorker = new Worker("/EPITECH-JAM-March-2022/webworker.js");
 
-const callbacks = {};
+class WorkerBuilder {
 
-pyodideWorker.onmessage = (event) => {
-  const { id, ...data } = event.data;
-  const onSuccess = callbacks[id];
-  delete callbacks[id];
-  onSuccess(data);
-};
+  constructor() {
+    this.id = 0;
+    this.callbacks = {};
+    this.worker = new Worker("/EPITECH-JAM-March-2022/pyodide.worker.js");
+    this.worker.onmessage = (event) => {
+      const { id, ...data } = event.data;
+      const onSuccess = this.callbacks[id];
+      delete this.callbacks[id];
+      onSuccess(data);
+    };
+  }
 
-const asyncRun = (() => {
-  let id = 0; // identify a Promise
-  return (python, context) => {
+  asyncRun(python, context) {
     // the id could be generated more carefully
-    id = (id + 1) % Number.MAX_SAFE_INTEGER;
+    this.id = (this.id + 1) % Number.MAX_SAFE_INTEGER;
     return new Promise((onSuccess) => {
-      callbacks[id] = onSuccess;
-      pyodideWorker.postMessage({
+      this.callbacks[this.id] = onSuccess;
+      this.worker.postMessage({
         ...context,
         python,
-        id,
+        id: this.id,
       });
     });
   };
-})();
+}
 
-export { asyncRun };
+const Pyodide = new WorkerBuilder();
+
+export default Pyodide;
