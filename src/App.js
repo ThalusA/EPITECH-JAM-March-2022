@@ -91,7 +91,10 @@ function App() {
     }, [loading, error, imageData]);
 
     return (
-        <Grid onDrop={onDropFile} onClick={() => inputFile.current?.click()}
+        <Grid onDrop={onDropFile} onClick={() => {
+            if (inputFile.current) inputFile.current.files = null;
+            inputFile.current?.click();
+        }}
               className="main-grid"
               container direction="column"
               sx={{
@@ -112,6 +115,7 @@ function App() {
             <Grid item xs={3}>
                 <Box onClick={event => event.stopPropagation()} sx={{overflow: "visible"}}>
                     <Select value={mode} label="Mode" onChange={event => {
+                        if (inputFile.current) inputFile.current.files = null;
                         setMode(event.target.value)
                     }}>
                         {modes.map(({value, label}) => <MenuItem key={label} value={value}>{label}</MenuItem>)}
@@ -123,7 +127,7 @@ function App() {
                 {imageComponent}
             </Grid>
             <Grid item xs={3}>
-                <ReactAudioPlayer src="/EPITECH-JAM-March-2022/Aqua-Angels.mp3" autoPlay controls />
+                <ReactAudioPlayer src="/EPITECH-JAM-March-2022/Aqua-Angels.mp3" autoPlay controls loop volume={0.5}/>
             </Grid>
         </Grid>
     );
