@@ -4,13 +4,10 @@ import {readAsDataURL} from "promise-file-reader";
 import {useEffect, useRef, useState} from "react";
 import {Box, Grid, MenuItem, Select, Typography} from "@mui/material";
 import {lightBlue} from "@mui/material/colors";
+import ReactAudioPlayer from 'react-audio-player';
 
 function App() {
     const converter = fetch("/EPITECH-JAM-March-2022/converter.py").then(response => response.text());
-    const calmingMusic = new Audio('/EPITECH-JAM-March-2022/Aqua-Angels.mp3');
-    calmingMusic.loop = true;
-    calmingMusic.volume = 0.50;
-    calmingMusic.play();
     const [error, setError] = useState("");
     const [imageData, setImageData] = useState("");
     const [loading, setLoading] = useState(false);
@@ -124,6 +121,9 @@ function App() {
             </Grid>
             <Grid item xs={3}>
                 {imageComponent}
+            </Grid>
+            <Grid item xs={3}>
+                <ReactAudioPlayer src="/EPITECH-JAM-March-2022/Aqua-Angels.mp3" autoPlay controls />
             </Grid>
         </Grid>
     );
