@@ -1,13 +1,13 @@
+import "./App.css";
 import Pyodide from "./py-worker";
 import {readAsDataURL} from "promise-file-reader";
 import {useEffect, useRef, useState} from "react";
-import {Box, Grid, MenuItem, Select, SvgIcon, Typography} from "@mui/material";
+import {Box, Grid, MenuItem, Select, Typography} from "@mui/material";
 import {lightBlue} from "@mui/material/colors";
-import Polygon from "./polygon.svg"
-import anime from 'animejs/lib/anime.es.js';
 
 function App() {
     const converter = fetch("/EPITECH-JAM-March-2022/converter.py").then(response => response.text());
+    const calmingMusic = new Audio('/EPITECH-JAM-March-2022/Aqua-Angels.mp3');
     const [error, setError] = useState("");
     const [imageData, setImageData] = useState("");
     const [loading, setLoading] = useState(false);
@@ -77,26 +77,19 @@ function App() {
     };
 
     useEffect(() => {
-        anime({
-            targets: ['.svg-attributes-demo polygon', 'feTurbulence', 'feDisplacementMap'],
-            points: '64 128 8.574 96 8.574 32 64 0 119.426 32 119.426 96',
-            baseFrequency: 0,
-            scale: 1,
-            loop: true,
-            direction: 'alternate',
-            easing: 'easeInOutExpo'
-        });
+        calmingMusic.loop = true;
+        calmingMusic.play();
     });
 
     useEffect(() => {
         if (loading === true) {
-            setImageComponent(<SvgIcon src={Polygon} className="svg-attributes-polygon" alt="polygon"/>);
+            setImageComponent(<div className="loading"/>);
         } else if (error !== "") {
             setImageComponent(<Typography>
                 Error: {error}
             </Typography>);
         } else if (imageData !== "") {
-            setImageComponent(<img src={imageData} style={{borderRadius: "5%"}} alt="converted"/>);
+            setImageComponent(<img src={imageData} style={{borderRadius: "5%", backgroundColor: "white"}} alt="converted"/>);
         } else {
             setImageComponent(null);
         }
@@ -104,6 +97,7 @@ function App() {
 
     return (
         <Grid onDrop={onDropFile} onClick={() => inputFile.current?.click()}
+              className="main-grid"
               container direction="column"
               sx={{
                   minHeight: "100vh", minWidth: "100vw", alignItems: "center", justifyContent: "center",
