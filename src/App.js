@@ -8,6 +8,9 @@ import {lightBlue} from "@mui/material/colors";
 function App() {
     const converter = fetch("/EPITECH-JAM-March-2022/converter.py").then(response => response.text());
     const calmingMusic = new Audio('/EPITECH-JAM-March-2022/Aqua-Angels.mp3');
+    calmingMusic.loop = true;
+    calmingMusic.volume = 0.50;
+    calmingMusic.play();
     const [error, setError] = useState("");
     const [imageData, setImageData] = useState("");
     const [loading, setLoading] = useState(false);
@@ -75,11 +78,6 @@ function App() {
         event.preventDefault();
         return convertFile(event.target.files);
     };
-
-    useEffect(() => {
-        calmingMusic.loop = true;
-        calmingMusic.play();
-    });
 
     useEffect(() => {
         if (loading === true) {
